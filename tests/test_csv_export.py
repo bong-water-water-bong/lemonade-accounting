@@ -1,0 +1,55 @@
+"""Tests for the CSV export.
+
+The outside accountant gets a CSV per day with one row per closed
+transaction. The columns are stable and quoted predictably so a
+spreadsheet program reads it without surprises.
+"""
+
+from __future__ import annotations
+
+import csv
+from datetime import date
+from io import StringIO
+from pathlib import Path
+
+from lemonade_accounting.csv_export import (
+    TRANSACTION_COLUMNS,
+    write_transactions_csv,
+)
+from lemonade_accounting.ingest import read_cashier_events
+
+FIXTURES = Path(__file__).resolve().parent / "fixtures"
+ONE_DAY = FIXTURES / "one_day_cashier.jsonl"
+
+
+def _csv_rows(target: date) -> list[dict[str, str]]:
+    events = read_cashier_events(ONE_DAY)
+    buf = StringIO()
+    write_transactions_csv(events, buf, date_utc=target)
+    buf.seek(0)
+    return list(csv.DictReader(buf))
+
+
+class TestTransactionsCSV:
+    def test_columns_are_stable(self) -> None:
+        rows = _csv_rows(date(2026, 5, 18))
+        assert list(rows[0].keys()) == list(TRANSACTION_COLUMNS)
+
+    def test_one_row_per_closed_transaction(self) -> None:
+        # 2026-05-18 has two `transaction.tender` events.
+        assert len(_csv_rows(date(2026, 5, 18))) == 2
+        assert len(_csv_rows(date(2026, 5, 19))) == 1
+
+    def test_row_values(self) -> None:
+        rows = _csv_rows(date(2026, 5, 18))
+        first = rows[0]
+        assert first["date"] == "2026-05-18"
+        assert first["total"] == "1.50"
+        assert first["cash_tendered"] == "5.00"
+        assert first["change"] == "3.50"
+        assert first["seq"] == "3"
+        assert first["attendant"] == "alice"
+
+    def test_zero_day_writes_header_only(self) -> None:
+        rows = _csv_rows(date(2026, 5, 17))
+        assert rows == []
