@@ -8,6 +8,7 @@ spreadsheet program reads it without surprises.
 from __future__ import annotations
 
 import csv
+import json
 from datetime import date
 from io import StringIO
 from pathlib import Path
@@ -85,3 +86,54 @@ class TestCSVFormulaInjectionDefense:
         rows = list(csv.DictReader(buf))
         assert rows[0]["attendant"].startswith("'=")
         assert rows[0]["total"].startswith("'+")
+
+    @pytest.mark.parametrize(
+        ("attendant", "total", "expect_attendant_prefix", "expect_total_prefix"),
+        [
+            # Tab and carriage return as the leading character — Excel
+            # treats both as formula triggers in some import paths.
+            ("\tlead-tab", "1.00", "'\t", "1"),
+            ("\rlead-cr", "1.00", "'\r", "1"),
+            # Negative numbers look like a formula to a spreadsheet (it
+            # tries to evaluate `-1.50` as `=NEGATE(1.50)`).
+            ("alice", "-1.50", "a", "'-"),
+            # `@` triggers Excel's intersection operator.
+            ("alice", "@sum(1,1)", "a", "'@"),
+        ],
+    )
+    def test_other_formula_triggers_are_quoted(
+        self,
+        tmp_path: Path,
+        attendant: str,
+        total: str,
+        expect_attendant_prefix: str,
+        expect_total_prefix: str,
+    ) -> None:
+        p = tmp_path / "events.jsonl"
+        open_event = {
+            "seq": 1,
+            "ts": "2026-05-18T14:00:00+00:00",
+            "type": "transaction.open",
+            "payload": {"attendant": attendant},
+            "prev": "a",
+            "hash": "b",
+        }
+        tender_event = {
+            "seq": 2,
+            "ts": "2026-05-18T14:01:00+00:00",
+            "type": "transaction.tender",
+            "payload": {"tender": "5.00", "total": total, "change": "3.50"},
+            "prev": "b",
+            "hash": "c",
+        }
+        p.write_text(
+            json.dumps(open_event) + "\n" + json.dumps(tender_event) + "\n",
+            encoding="utf-8",
+        )
+        events = read_cashier_events(p)
+        buf = StringIO()
+        write_transactions_csv(events, buf, date_utc=date(2026, 5, 18))
+        buf.seek(0)
+        row = next(csv.DictReader(buf))
+        assert row["attendant"].startswith(expect_attendant_prefix)
+        assert row["total"].startswith(expect_total_prefix)
