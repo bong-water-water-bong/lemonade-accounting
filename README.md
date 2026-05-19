@@ -87,7 +87,9 @@ from lemonade_accounting import daily_close, read_cashier_events
 events = read_cashier_events("path/to/cashier/events.jsonl")
 close = daily_close(events, date_utc=date(2026, 5, 19), store_id="tie-dye-farms")
 print(close.summary.sales_total)       # Decimal("...")
-print(close.event["event_id"])         # accounting-daily-close-tie-dye-farms-...
+print(close.event["event_id"])         # accounting-daily-close-tie-dye-farms-2026-05-19-<16-hex>
+# `<16-hex>` is a deterministic SHA-256 prefix over (store_id, date, payload):
+# same inputs → same id, byte-for-byte. Re-runs are idempotent.
 ```
 
 ## Status
