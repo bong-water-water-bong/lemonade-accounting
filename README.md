@@ -7,6 +7,10 @@
 [![Cashier](https://img.shields.io/badge/source--of--truth-lemonade--cashier-2ea44f)](https://github.com/bong-water-water-bong/lemonade-cashier)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
+<p align="center">
+  <img src="docs/assets/lemonade-accounting-logo.svg" alt="Lemonade Accounting logo showing cashier JSONL flowing through the closer into accounting events" width="900">
+</p>
+
 > Daily close, cash reconciliation, and CSV exports for Lemonade Store.
 
 **Lemonade Accounting** is the `accounting` department of

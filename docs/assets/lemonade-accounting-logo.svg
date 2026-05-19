@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Lemonade Accounting logo</title>
+  <desc id="desc">A local-first accounting department logo showing cash close, reconciliation, exports, and audit events.</desc>
+  <rect width="1200" height="420" rx="36" fill="#fff8d8"/>
+  <rect x="32" y="32" width="1136" height="356" rx="28" fill="#ffffff" stroke="#22313f" stroke-width="6"/>
+  <circle cx="145" cy="132" r="58" fill="#ffd34d" stroke="#22313f" stroke-width="6"/>
+  <path d="M126 132c0-19 14-32 34-32 12 0 23 5 31 13" fill="none" stroke="#22313f" stroke-width="10" stroke-linecap="round"/>
+  <path d="M163 101v-20M163 183v-20M126 164c8 9 20 14 35 14 21 0 36-12 36-30 0-20-16-27-35-31" fill="none" stroke="#22313f" stroke-width="10" stroke-linecap="round"/>
+  <text x="240" y="132" font-family="Inter, Arial, sans-serif" font-size="58" font-weight="800" fill="#22313f">Lemonade Accounting</text>
+  <text x="242" y="184" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="600" fill="#5c6b73">daily close • cash reconcile • CSV exports</text>
+  <g transform="translate(92 248)">
+    <rect width="248" height="76" rx="14" fill="#eaf7ef" stroke="#22313f" stroke-width="4"/>
+    <text x="124" y="48" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" fill="#22313f">cashier JSONL</text>
+  </g>
+  <path d="M356 286h84" stroke="#22313f" stroke-width="8" stroke-linecap="round"/>
+  <path d="M424 266l24 20-24 20" fill="none" stroke="#22313f" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <g transform="translate(472 230)">
+    <rect width="256" height="112" rx="16" fill="#fff3b0" stroke="#22313f" stroke-width="4"/>
+    <text x="128" y="48" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800" fill="#22313f">closer</text>
+    <text x="128" y="82" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700" fill="#5c6b73">deterministic</text>
+  </g>
+  <path d="M744 286h84" stroke="#22313f" stroke-width="8" stroke-linecap="round"/>
+  <path d="M812 266l24 20-24 20" fill="none" stroke="#22313f" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <g transform="translate(860 248)">
+    <rect width="248" height="76" rx="14" fill="#e9f0ff" stroke="#22313f" stroke-width="4"/>
+    <text x="124" y="48" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" fill="#22313f">accounting.*</text>
+  </g>
+</svg>
