@@ -78,6 +78,63 @@ class TestMalformedLines:
             read_cashier_events(p)
 
 
+class TestCoercionErrorsAreIngestErrors:
+    """`int(record['seq'])` and friends must not leak as raw exceptions."""
+
+    def test_seq_not_an_integer_raises_ingest_error(self, tmp_path: Path) -> None:
+        p = tmp_path / "events.jsonl"
+        # `seq` is a list — `int([...])` raises TypeError.
+        p.write_text(
+            '{"seq":[1,2],"ts":"2026-05-18T14:00:00+00:00","type":"x.y",'
+            '"payload":{},"prev":"a","hash":"b"}\n',
+            encoding="utf-8",
+        )
+        with pytest.raises(IngestError) as exc:
+            read_cashier_events(p)
+        assert "invalid field types" in str(exc.value)
+
+    def test_payload_not_a_dict_raises_ingest_error(self, tmp_path: Path) -> None:
+        p = tmp_path / "events.jsonl"
+        p.write_text(
+            '{"seq":1,"ts":"2026-05-18T14:00:00+00:00","type":"x.y",'
+            '"payload":"not-an-object","prev":"a","hash":"b"}\n',
+            encoding="utf-8",
+        )
+        with pytest.raises(IngestError) as exc:
+            read_cashier_events(p)
+        assert "payload" in str(exc.value).lower()
+
+
+class TestUtcDateNormalization:
+    def test_z_suffix_accepted(self) -> None:
+        from lemonade_accounting.ingest import CashierEvent
+
+        event = CashierEvent(
+            seq=1,
+            ts="2026-05-18T23:30:00Z",
+            type="x.y",
+            payload={},
+            prev="a",
+            hash="b",
+        )
+        assert event.utc_date() == date(2026, 5, 18)
+
+    def test_non_utc_offset_normalized_to_utc(self) -> None:
+        from lemonade_accounting.ingest import CashierEvent
+
+        # 23:30-08:00 = 07:30+00:00 the *next* day; the UTC bucket is
+        # the one that matters for daily close.
+        event = CashierEvent(
+            seq=1,
+            ts="2026-05-18T23:30:00-08:00",
+            type="x.y",
+            payload={},
+            prev="a",
+            hash="b",
+        )
+        assert event.utc_date() == date(2026, 5, 19)
+
+
 class TestReadTimeout:
     def test_timeout_zero_rejects_long_read(self, tmp_path: Path) -> None:
         # A 0-second budget is the simplest deterministic way to prove

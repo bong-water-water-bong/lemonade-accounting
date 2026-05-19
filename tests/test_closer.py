@@ -109,6 +109,30 @@ class TestCashierEventsAreReadOnly:
         assert snapshot == after
 
 
+class TestMalformedMoneyRaisesIngestError:
+    """Decimal parse failures inside `_summarize` must surface as IngestError."""
+
+    def test_garbage_tender_field_raises(self, tmp_path: Path) -> None:
+        from lemonade_accounting.ingest import IngestError, read_cashier_events
+
+        p = tmp_path / "events.jsonl"
+        # `total` is "not-money" — Decimal raises InvalidOperation.
+        p.write_text(
+            '{"seq":1,"ts":"2026-05-18T14:00:00+00:00",'
+            '"type":"transaction.tender",'
+            '"payload":{"tender":"5.00","total":"not-money","change":"0.00"},'
+            '"prev":"a","hash":"b"}\n',
+            encoding="utf-8",
+        )
+        import pytest
+
+        events = read_cashier_events(p)
+        with pytest.raises(IngestError) as exc:
+            daily_close(events, date_utc=date(2026, 5, 18), store_id="tie-dye-farms")
+        assert "decimal" in str(exc.value).lower()
+        assert "seq=1" in str(exc.value)
+
+
 class TestEnvelopeMatchesContract:
     def test_envelope_rejected_if_store_id_missing(self) -> None:
         # Sanity-check: any breakage to our envelope shape would be caught

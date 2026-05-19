@@ -25,10 +25,10 @@ import json
 from collections.abc import Iterable
 from dataclasses import asdict, dataclass, field
 from datetime import date
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from typing import Any
 
-from lemonade_accounting.ingest import CashierEvent
+from lemonade_accounting.ingest import CashierEvent, IngestError
 
 # Cashier event types we sum / count. Keeping these as constants makes
 # it obvious which cashier-side schema changes would force an update
@@ -103,9 +103,9 @@ def _summarize(events: Iterable[CashierEvent], *, date_utc: date) -> Summary:
         elif t == _TYPE_TXN_CLOSE:
             transactions_closed += 1
         elif t == _TYPE_TXN_TENDER:
-            sales_total += _money(event.payload.get("total"))
-            cash_tendered_total += _money(event.payload.get("tender"))
-            change_total += _money(event.payload.get("change"))
+            sales_total += _money(event, "total")
+            cash_tendered_total += _money(event, "tender")
+            change_total += _money(event, "change")
         elif t == _TYPE_CIT_DROP:
             cit_drops += 1
         elif t == _TYPE_CIT_PICKUP:
@@ -134,15 +134,28 @@ def _summarize(events: Iterable[CashierEvent], *, date_utc: date) -> Summary:
     )
 
 
-def _money(value: object) -> Decimal:
+def _money(event: CashierEvent, key: str) -> Decimal:
+    """Parse a tender payload money field, raising `IngestError` on garbage.
+
+    Cashier writes monetary values as strings (e.g. ``"1.50"``). We
+    accept missing keys as ``"0.00"``; any other failure to parse
+    surfaces as `IngestError` so the CLI's single
+    ``except IngestError`` catches it.
+    """
+    value = event.payload.get(key)
     if value is None:
         return Decimal("0.00")
     if isinstance(value, Decimal):
         return value
-    # Cashier writes monetary values as strings (e.g. "1.50"). Trust
-    # the string; do not convert from float — that would corrupt the
-    # value cashier carefully serialized with quantize.
-    return Decimal(str(value))
+    try:
+        # `str(value)` covers both string and numeric JSON inputs; we
+        # never convert from float, which would corrupt the value
+        # cashier carefully serialized with quantize.
+        return Decimal(str(value))
+    except (InvalidOperation, ValueError, TypeError) as exc:
+        raise IngestError(
+            f"event seq={event.seq} ({event.type}): payload.{key}={value!r} is not a valid decimal"
+        ) from exc
 
 
 def _build_envelope(summary: Summary, *, date_utc: date, store_id: str) -> dict[str, Any]:

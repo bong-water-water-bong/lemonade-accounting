@@ -34,6 +34,20 @@ TRANSACTION_COLUMNS: tuple[str, ...] = (
     "change",
 )
 
+# Spreadsheet applications (Excel, LibreOffice, Google Sheets) interpret
+# a cell that starts with any of these characters as a formula. An
+# attendant name like `=cmd|"/c calc"!A1` opens code-execution surface
+# the moment the outside accountant double-clicks the CSV. Defuse by
+# prefixing a single quote, which spreadsheet apps render as a leading
+# apostrophe-text marker without changing the value's meaning.
+_FORMULA_PREFIXES: tuple[str, ...] = ("=", "+", "-", "@", "\t", "\r")
+
+
+def _csv_safe(value: str) -> str:
+    if value and value[0] in _FORMULA_PREFIXES:
+        return "'" + value
+    return value
+
 
 def write_transactions_csv(
     events: Iterable[CashierEvent],
@@ -63,10 +77,10 @@ def write_transactions_csv(
             {
                 "date": date_utc.isoformat(),
                 "seq": event.seq,
-                "attendant": current_attendant,
-                "total": str(event.payload.get("total", "")),
-                "cash_tendered": str(event.payload.get("tender", "")),
-                "change": str(event.payload.get("change", "")),
+                "attendant": _csv_safe(current_attendant),
+                "total": _csv_safe(str(event.payload.get("total", ""))),
+                "cash_tendered": _csv_safe(str(event.payload.get("tender", ""))),
+                "change": _csv_safe(str(event.payload.get("change", ""))),
             }
         )
         rows_written += 1

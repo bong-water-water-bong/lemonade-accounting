@@ -3,7 +3,7 @@
 The outside accountant gets a CSV per day with one row per closed
 transaction. Columns are stable, in this order:
 
-```
+```text
 date,seq,attendant,total,cash_tendered,change
 ```
 
@@ -23,6 +23,15 @@ date,seq,attendant,total,cash_tendered,change
 2026-05-18,3,alice,1.50,5.00,3.50
 2026-05-18,7,alice,3.49,4.00,0.51
 ```
+
+## Spreadsheet-formula safety
+
+Cells whose first character is one of `= + - @ \t \r` are prefixed
+with a single quote (`'`) before writing. Spreadsheet apps interpret
+those leading characters as a formula; the apostrophe disables
+formula parsing and renders the cell as plain text. The attendant
+field is the realistic vector (cashier-influenced); the money fields
+are sanitized too as defense in depth.
 
 ## Privacy
 

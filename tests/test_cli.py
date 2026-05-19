@@ -12,6 +12,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 from lemonade_accounting.cli import main
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
@@ -61,6 +63,23 @@ class TestCloseCommand:
 
 
 class TestCLIBadArgs:
+    @pytest.mark.parametrize("bad", ["0", "-1", "nan", "inf", "abc"])
+    def test_invalid_timeout_rejected(self, bad: str) -> None:
+        with pytest.raises(SystemExit):
+            main(
+                [
+                    "close",
+                    "--events",
+                    str(ONE_DAY),
+                    "--date",
+                    "2026-05-18",
+                    "--store-id",
+                    "tie-dye-farms",
+                    "--timeout-sec",
+                    bad,
+                ]
+            )
+
     def test_bad_date_exits_nonzero(self, capsys) -> None:
         rc = main(
             [

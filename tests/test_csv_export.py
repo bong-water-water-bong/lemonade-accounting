@@ -12,6 +12,8 @@ from datetime import date
 from io import StringIO
 from pathlib import Path
 
+import pytest
+
 from lemonade_accounting.csv_export import (
     TRANSACTION_COLUMNS,
     write_transactions_csv,
@@ -53,3 +55,33 @@ class TestTransactionsCSV:
     def test_zero_day_writes_header_only(self) -> None:
         rows = _csv_rows(date(2026, 5, 17))
         assert rows == []
+
+
+class TestCSVFormulaInjectionDefense:
+    """Cells starting with formula triggers must be neutralized."""
+
+    @pytest.fixture
+    def malicious_log(self, tmp_path: Path) -> Path:
+        p = tmp_path / "events.jsonl"
+        p.write_text(
+            # Attendant name starts with `=`; total starts with `+`.
+            '{"seq":1,"ts":"2026-05-18T14:00:00+00:00",'
+            '"type":"transaction.open",'
+            '"payload":{"attendant":"=cmd|\\"/c calc\\"!A1"},'
+            '"prev":"a","hash":"b"}\n'
+            '{"seq":2,"ts":"2026-05-18T14:01:00+00:00",'
+            '"type":"transaction.tender",'
+            '"payload":{"tender":"5.00","total":"+1.50","change":"3.50"},'
+            '"prev":"b","hash":"c"}\n',
+            encoding="utf-8",
+        )
+        return p
+
+    def test_formula_cells_are_quoted(self, malicious_log: Path) -> None:
+        events = read_cashier_events(malicious_log)
+        buf = StringIO()
+        write_transactions_csv(events, buf, date_utc=date(2026, 5, 18))
+        buf.seek(0)
+        rows = list(csv.DictReader(buf))
+        assert rows[0]["attendant"].startswith("'=")
+        assert rows[0]["total"].startswith("'+")

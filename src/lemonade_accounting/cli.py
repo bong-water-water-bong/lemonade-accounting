@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from collections.abc import Sequence
 from datetime import date
@@ -28,6 +29,19 @@ from pathlib import Path
 from lemonade_accounting.closer import daily_close
 from lemonade_accounting.csv_export import write_transactions_csv
 from lemonade_accounting.ingest import IngestError, read_cashier_events
+
+
+def _positive_timeout(raw: str) -> float:
+    """Argparse type for `--timeout-sec`: finite and > 0."""
+    try:
+        value = float(raw)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(f"not a number: {raw!r}") from exc
+    if not math.isfinite(value):
+        raise argparse.ArgumentTypeError(f"must be finite, got {raw!r}")
+    if value <= 0:
+        raise argparse.ArgumentTypeError(f"must be > 0, got {value}")
+    return value
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -48,9 +62,9 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     close.add_argument(
         "--timeout-sec",
-        type=float,
+        type=_positive_timeout,
         default=5.0,
-        help="Wall-clock budget for reading the cashier log (default 5.0)",
+        help="Wall-clock budget for reading the cashier log; must be > 0 (default 5.0)",
     )
     return parser
 

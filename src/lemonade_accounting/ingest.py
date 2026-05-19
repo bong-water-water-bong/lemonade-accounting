@@ -19,14 +19,16 @@ accounting module reads `CashierEvent` objects produced here.
 
 Two non-obvious choices:
 
-* `iter_cashier_events` enforces an optional wall-clock timeout because
-  the eventual production setup may read from a slow disk or a network
-  mount and we never want a daily close to wedge waiting for I/O. The
-  default is 5 seconds; the cashier is the source of truth and
-  accounting must not block it.
-* `IngestError` wraps everything (bad JSON, missing field, timeout) so
-  callers can have a single `except`. We do *not* try to verify the
-  hash chain here — that is cashier's own job, run by `cashier verify`.
+* `iter_cashier_events` enforces an optional wall-clock timeout that
+  is checked **between successfully read lines**. It bounds total
+  parse time when the file is producing data slowly; it cannot
+  interrupt a single OS-level blocked read (a true I/O kill switch
+  needs a worker thread, deferred to a future revision). The default
+  budget is 5 seconds.
+* `IngestError` wraps everything (bad JSON, missing field, type
+  coercion failures, timeout) so callers can have a single `except`.
+  We do *not* verify the cashier hash chain here — that is cashier's
+  own job, run by `cashier verify`.
 """
 
 from __future__ import annotations
@@ -35,7 +37,7 @@ import json
 import time
 from collections.abc import Iterator
 from dataclasses import dataclass
-from datetime import date, datetime
+from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
 
@@ -57,10 +59,13 @@ class CashierEvent:
 
     def utc_date(self) -> date:
         # Cashier writes timestamps with an explicit UTC offset
-        # (`+00:00` or `Z`), so `datetime.fromisoformat` returns a
-        # tz-aware value; converting to UTC is a no-op but makes the
-        # intent explicit and protects against a future format drift.
-        return datetime.fromisoformat(self.ts).date()
+        # (`+00:00`), but the contract also allows `Z`. Python's
+        # `datetime.fromisoformat` accepts `Z` on 3.11+, but we
+        # normalize anyway to keep the conversion intent explicit
+        # and to guard against a future format drift to a non-UTC
+        # offset. After normalization we extract the date in UTC.
+        ts = self.ts.replace("Z", "+00:00") if self.ts.endswith("Z") else self.ts
+        return datetime.fromisoformat(ts).astimezone(UTC).date()
 
 
 def iter_cashier_events(
@@ -103,14 +108,28 @@ def iter_cashier_events(
                 if required not in record:
                     raise IngestError(f"{path}:{line_number}: missing required field {required!r}")
 
-            yield CashierEvent(
-                seq=int(record["seq"]),
-                ts=str(record["ts"]),
-                type=str(record["type"]),
-                payload=dict(record["payload"]),
-                prev=str(record["prev"]),
-                hash=str(record["hash"]),
-            )
+            if not isinstance(record["payload"], dict):
+                raise IngestError(
+                    f"{path}:{line_number}: payload must be a JSON object, "
+                    f"got {type(record['payload']).__name__}"
+                )
+
+            # Type coercion failures (e.g. seq is a list, ts is null)
+            # must surface as `IngestError` so the CLI's single
+            # `except IngestError` catches them. Without this guard the
+            # bare `int(...)` / `str(...)` calls below leak
+            # `TypeError` / `ValueError` to the caller.
+            try:
+                yield CashierEvent(
+                    seq=int(record["seq"]),
+                    ts=str(record["ts"]),
+                    type=str(record["type"]),
+                    payload=dict(record["payload"]),
+                    prev=str(record["prev"]),
+                    hash=str(record["hash"]),
+                )
+            except (TypeError, ValueError) as exc:
+                raise IngestError(f"{path}:{line_number}: invalid field types: {exc}") from exc
 
 
 def read_cashier_events(

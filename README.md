@@ -54,7 +54,7 @@ make test
 ```
 
 Python 3.11+. The runtime depends on
-`lemonade-store @ git+https://github.com/.../lemonade-store@v0.1.0`
+`lemonade-store @ git+https://github.com/bong-water-water-bong/lemonade-store@v0.1.0`
 for the shared envelope; everything else is stdlib.
 
 ## CLI
