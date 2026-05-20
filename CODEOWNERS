@@ -1,0 +1,8 @@
+# Default owner for everything in this repo.
+*       @bong-water-water-bong
+
+# Contract surfaces — extra eyes because changes ripple to the
+# store-wide event log and the outside accountant.
+/src/lemonade_accounting/closer.py     @bong-water-water-bong
+/src/lemonade_accounting/csv_export.py @bong-water-water-bong
+/src/lemonade_accounting/ingest.py     @bong-water-water-bong

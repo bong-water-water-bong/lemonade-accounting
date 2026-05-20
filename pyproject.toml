@@ -1,0 +1,89 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lemonade-accounting"
+version = "0.1.0"
+description = "Daily close, cash reconciliation, and CSV exports for Lemonade Store. Reads cashier JSONL, emits accounting.* envelope events. No payment processing."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Lemonade Accounting contributors" }]
+keywords = ["accounting", "pos", "offline-first", "lemonade", "strix-halo"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Office/Business :: Financial :: Accounting",
+]
+# `lemonade-store` carries the shared event envelope and department
+# registry. It is the only runtime dependency; everything else is
+# stdlib.
+dependencies = [
+  "lemonade-store @ git+https://github.com/bong-water-water-bong/lemonade-store@v0.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "pytest-cov>=5",
+  "ruff>=0.6",
+  "mypy>=1.10",
+]
+docs = [
+  "mkdocs>=1.6",
+  "mkdocs-material>=9.5",
+]
+
+[project.scripts]
+lemonade-accounting = "lemonade_accounting.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/bong-water-water-bong/lemonade-accounting"
+Issues = "https://github.com/bong-water-water-bong/lemonade-accounting/issues"
+Store = "https://github.com/bong-water-water-bong/lemonade-store"
+Cashier = "https://github.com/bong-water-water-bong/lemonade-cashier"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+lemonade_accounting = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+  "E",
+  "F",
+  "I",
+  "UP",
+  "B",
+  "SIM",
+]
+ignore = [
+  "E501",
+]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+mypy_path = "src"
+packages = ["lemonade_accounting"]
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unreachable = true
+no_implicit_optional = true

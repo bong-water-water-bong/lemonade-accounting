@@ -1,0 +1,38 @@
+site_name: Lemonade Accounting
+site_description: Daily close, cash reconciliation, and CSV exports for Lemonade Store.
+site_url: https://bong-water-water-bong.github.io/lemonade-accounting/
+repo_url: https://github.com/bong-water-water-bong/lemonade-accounting
+repo_name: bong-water-water-bong/lemonade-accounting
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  features:
+    - navigation.top
+    - navigation.sections
+    - content.code.copy
+    - toc.integrate
+  palette:
+    - scheme: default
+      primary: yellow
+      accent: amber
+    - scheme: slate
+      primary: yellow
+      accent: amber
+
+nav:
+  - Home: index.md
+  - Closer: CLOSER.md
+  - Events: EVENTS.md
+  - CSV export: CSV_EXPORT.md
+  - Build order: BUILD_ORDER.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - tables
+  - toc:
+      permalink: true
+
+strict: true

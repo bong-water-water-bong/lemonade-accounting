@@ -1,0 +1,14 @@
+{"seq":1,"ts":"2026-05-18T14:00:00+00:00","type":"transaction.open","payload":{"attendant":"alice","tax_rate":"0.0875"},"prev":"0000000000000000000000000000000000000000000000000000000000000000","hash":"a"}
+{"seq":2,"ts":"2026-05-18T14:01:00+00:00","type":"cart.add","payload":{"sku":"APL001","qty":2,"unit_price":"0.75"},"prev":"a","hash":"b"}
+{"seq":3,"ts":"2026-05-18T14:02:00+00:00","type":"transaction.tender","payload":{"tender":"5.00","total":"1.50","change":"3.50"},"prev":"b","hash":"c"}
+{"seq":4,"ts":"2026-05-18T14:02:30+00:00","type":"transaction.close","payload":{},"prev":"c","hash":"d"}
+{"seq":5,"ts":"2026-05-18T15:30:00+00:00","type":"transaction.open","payload":{"attendant":"alice","tax_rate":"0.0875"},"prev":"d","hash":"e"}
+{"seq":6,"ts":"2026-05-18T15:31:00+00:00","type":"cart.add","payload":{"sku":"MLK001","qty":1,"unit_price":"3.49"},"prev":"e","hash":"f"}
+{"seq":7,"ts":"2026-05-18T15:32:00+00:00","type":"transaction.tender","payload":{"tender":"4.00","total":"3.49","change":"0.51"},"prev":"f","hash":"g"}
+{"seq":8,"ts":"2026-05-18T15:32:30+00:00","type":"transaction.close","payload":{},"prev":"g","hash":"h"}
+{"seq":9,"ts":"2026-05-18T17:00:00+00:00","type":"cit.drop","payload":{"amount":"100.00","attendant":"alice"},"prev":"h","hash":"i"}
+{"seq":10,"ts":"2026-05-18T17:01:00+00:00","type":"cit.bag.sealed","payload":{"bag_id":"BAG-001","amount":"100.00"},"prev":"i","hash":"j"}
+{"seq":11,"ts":"2026-05-18T17:02:00+00:00","type":"cit.bag.handoff","payload":{"bag_id":"BAG-001","carrier":"cit-co"},"prev":"j","hash":"k"}
+{"seq":12,"ts":"2026-05-19T10:00:00+00:00","type":"transaction.open","payload":{"attendant":"alice","tax_rate":"0.0875"},"prev":"k","hash":"l"}
+{"seq":13,"ts":"2026-05-19T10:02:00+00:00","type":"transaction.tender","payload":{"tender":"10.00","total":"7.42","change":"2.58"},"prev":"l","hash":"m"}
+{"seq":14,"ts":"2026-05-19T10:02:30+00:00","type":"transaction.close","payload":{},"prev":"m","hash":"n"}
