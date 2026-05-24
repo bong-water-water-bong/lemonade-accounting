@@ -13,6 +13,8 @@
 
 > Daily close, cash reconciliation, and CSV exports for Lemonade Store.
 
+**→ [Project Wiki](docs/wiki/README.md)** — architecture, decisions, gotchas, and agent onboarding.
+
 **Lemonade Accounting** is the `accounting` department of
 [Lemonade Store](https://github.com/bong-water-water-bong/lemonade-store).
 It reads
