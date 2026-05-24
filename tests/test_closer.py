@@ -57,6 +57,29 @@ class TestDailyCloseSummary:
         assert s.sales_total == D("0.00")
         assert s.cash_tendered_total == D("0.00")
 
+    def test_precision_enforcement(self, tmp_path: Path) -> None:
+        """Internal 4-place precision must be rounded to 2-place for display/envelope."""
+        p = tmp_path / "precision.jsonl"
+        # 1.0001 + 1.0001 = 2.0002.
+        # Display should be 2.00.
+        p.write_text(
+            '{"seq":1,"ts":"2026-05-18T14:00:00+00:00","type":"transaction.tender",'
+            '"payload":{"total":"1.0001","tender":"2.0000","change":"0.9999"},"prev":"a","hash":"b"}\n',
+            encoding="utf-8"
+        )
+        events = read_cashier_events(p)
+        close = daily_close(events, date_utc=date(2026, 5, 18), store_id="test-store")
+        
+        # Internal summary should have 4 places (if we enforce it)
+        # For now, let's see what it has. 
+        # Actually, if we WANT to enforce 4 places, we should check for it.
+        assert close.summary.sales_total == D("1.0001")
+        
+        # Envelope payload MUST be 2 places.
+        assert close.event["payload"]["sales_total"] == "1.00"
+        assert close.event["payload"]["cash_tendered_total"] == "2.00"
+        assert close.event["payload"]["change_total"] == "1.00"
+
 
 class TestEnvelopeEvent:
     def test_envelope_is_valid_store_event_v1(self) -> None:

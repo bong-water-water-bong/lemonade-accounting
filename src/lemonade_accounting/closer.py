@@ -25,10 +25,14 @@ import json
 from collections.abc import Iterable
 from dataclasses import asdict, dataclass, field
 from datetime import date
-from decimal import Decimal, InvalidOperation
+from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
 from typing import Any
 
 from lemonade_accounting.ingest import CashierEvent, IngestError
+
+# Financial precision rules from .qodo_rules.md
+_INTERNAL_PRECISION = Decimal("0.0001")
+_DISPLAY_PRECISION = Decimal("0.01")
 
 # Cashier event types we sum / count. Keeping these as constants makes
 # it obvious which cashier-side schema changes would force an update
@@ -144,14 +148,14 @@ def _money(event: CashierEvent, key: str) -> Decimal:
     """
     value = event.payload.get(key)
     if value is None:
-        return Decimal("0.00")
+        return Decimal("0.0000").quantize(_INTERNAL_PRECISION)
     if isinstance(value, Decimal):
-        return value
+        return value.quantize(_INTERNAL_PRECISION, rounding=ROUND_HALF_UP)
     try:
         # `str(value)` covers both string and numeric JSON inputs; we
         # never convert from float, which would corrupt the value
         # cashier carefully serialized with quantize.
-        return Decimal(str(value))
+        return Decimal(str(value)).quantize(_INTERNAL_PRECISION, rounding=ROUND_HALF_UP)
     except (InvalidOperation, ValueError, TypeError) as exc:
         raise IngestError(
             f"event seq={event.seq} ({event.type}): payload.{key}={value!r} is not a valid decimal"
@@ -163,9 +167,9 @@ def _build_envelope(summary: Summary, *, date_utc: date, store_id: str) -> dict[
         "date": date_utc.isoformat(),
         "transactions_opened": summary.transactions_opened,
         "transactions_closed": summary.transactions_closed,
-        "sales_total": str(summary.sales_total),
-        "cash_tendered_total": str(summary.cash_tendered_total),
-        "change_total": str(summary.change_total),
+        "sales_total": str(summary.sales_total.quantize(_DISPLAY_PRECISION, rounding=ROUND_HALF_UP)),
+        "cash_tendered_total": str(summary.cash_tendered_total.quantize(_DISPLAY_PRECISION, rounding=ROUND_HALF_UP)),
+        "change_total": str(summary.change_total.quantize(_DISPLAY_PRECISION, rounding=ROUND_HALF_UP)),
         "cit_drops": summary.cit_drops,
         "cit_pickups": summary.cit_pickups,
         "cit_bags_sealed": summary.cit_bags_sealed,
@@ -211,5 +215,8 @@ def summary_as_dict(summary: Summary) -> dict[str, Any]:
     """Plain-dict view of a `Summary` (Decimals → str for JSON-friendliness)."""
     out: dict[str, Any] = {}
     for key, value in asdict(summary).items():
-        out[key] = str(value) if isinstance(value, Decimal) else value
+        if isinstance(value, Decimal):
+            out[key] = str(value.quantize(_DISPLAY_PRECISION, rounding=ROUND_HALF_UP))
+        else:
+            out[key] = value
     return out
