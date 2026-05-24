@@ -1,3 +1,5 @@
+> **Start here:** Read `docs/wiki/README.md` before any work on this project.
+
 # AGENTS.md — Lemonade Accounting
 
 This file is the contract every contributor (human or AI) follows when
