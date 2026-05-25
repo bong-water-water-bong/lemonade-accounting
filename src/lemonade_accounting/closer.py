@@ -179,9 +179,15 @@ def _build_envelope(summary: Summary, *, date_utc: date, store_id: str) -> dict[
         "date": date_utc.isoformat(),
         "transactions_opened": summary.transactions_opened,
         "transactions_closed": summary.transactions_closed,
-        "sales_total": str(summary.sales_total.quantize(_DISPLAY_PRECISION, rounding=ROUND_HALF_UP)),
-        "cash_tendered_total": str(summary.cash_tendered_total.quantize(_DISPLAY_PRECISION, rounding=ROUND_HALF_UP)),
-        "change_total": str(summary.change_total.quantize(_DISPLAY_PRECISION, rounding=ROUND_HALF_UP)),
+        "sales_total": str(
+            summary.sales_total.quantize(_DISPLAY_PRECISION, rounding=ROUND_HALF_UP)
+        ),
+        "cash_tendered_total": str(
+            summary.cash_tendered_total.quantize(_DISPLAY_PRECISION, rounding=ROUND_HALF_UP)
+        ),
+        "change_total": str(
+            summary.change_total.quantize(_DISPLAY_PRECISION, rounding=ROUND_HALF_UP)
+        ),
         "cit_drops": summary.cit_drops,
         "cit_pickups": summary.cit_pickups,
         "cit_bags_sealed": summary.cit_bags_sealed,
