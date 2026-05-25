@@ -40,11 +40,18 @@ _DISPLAY_PRECISION = Decimal("0.01")
 _TYPE_TXN_OPEN = "transaction.open"
 _TYPE_TXN_TENDER = "transaction.tender"
 _TYPE_TXN_CLOSE = "transaction.close"
+_TYPE_STORE_TXN_OPEN = "cashier.transaction.opened"
+_TYPE_STORE_TXN_CLOSE = "cashier.transaction.closed"
 _TYPE_CIT_DROP = "cit.drop"
 _TYPE_CIT_PICKUP = "cit.pickup"
 _TYPE_CIT_BAG_SEALED = "cit.bag.sealed"
 _TYPE_CIT_BAG_HANDOFF = "cit.bag.handoff"
 _TYPE_CIT_BAG_RECEIVED = "cit.bag.received"
+_TYPE_STORE_CIT_DROP = "cashier.cit.drop"
+_TYPE_STORE_CIT_PICKUP = "cashier.cit.pickup"
+_TYPE_STORE_CIT_BAG_SEALED = "cashier.cit.bag.sealed"
+_TYPE_STORE_CIT_BAG_HANDOFF = "cashier.cit.bag.handoff"
+_TYPE_STORE_CIT_BAG_RECEIVED = "cashier.cit.bag.received"
 
 
 @dataclass(frozen=True)
@@ -102,23 +109,28 @@ def _summarize(events: Iterable[CashierEvent], *, date_utc: date) -> Summary:
             continue
         t = event.type
 
-        if t == _TYPE_TXN_OPEN:
+        if t in {_TYPE_TXN_OPEN, _TYPE_STORE_TXN_OPEN}:
             transactions_opened += 1
         elif t == _TYPE_TXN_CLOSE:
             transactions_closed += 1
+        elif t == _TYPE_STORE_TXN_CLOSE:
+            transactions_closed += 1
+            sales_total += _money(event, "total")
+            cash_tendered_total += _money(event, "cash_tendered")
+            change_total += _money(event, "change")
         elif t == _TYPE_TXN_TENDER:
             sales_total += _money(event, "total")
             cash_tendered_total += _money(event, "tender")
             change_total += _money(event, "change")
-        elif t == _TYPE_CIT_DROP:
+        elif t in {_TYPE_CIT_DROP, _TYPE_STORE_CIT_DROP}:
             cit_drops += 1
-        elif t == _TYPE_CIT_PICKUP:
+        elif t in {_TYPE_CIT_PICKUP, _TYPE_STORE_CIT_PICKUP}:
             cit_pickups += 1
-        elif t == _TYPE_CIT_BAG_SEALED:
+        elif t in {_TYPE_CIT_BAG_SEALED, _TYPE_STORE_CIT_BAG_SEALED}:
             cit_bags_sealed += 1
-        elif t == _TYPE_CIT_BAG_HANDOFF:
+        elif t in {_TYPE_CIT_BAG_HANDOFF, _TYPE_STORE_CIT_BAG_HANDOFF}:
             cit_bags_handed_off += 1
-        elif t == _TYPE_CIT_BAG_RECEIVED:
+        elif t in {_TYPE_CIT_BAG_RECEIVED, _TYPE_STORE_CIT_BAG_RECEIVED}:
             cit_bags_received += 1
         # Other cashier event types (cart.*) are not summarized at the
         # daily-close level; they are visible per-transaction in the

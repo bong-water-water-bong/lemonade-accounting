@@ -41,6 +41,8 @@ from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
 
+from lemonade_store.events import EventValidationError, load_event
+
 _REQUIRED_FIELDS: tuple[str, ...] = ("seq", "ts", "type", "payload", "prev", "hash")
 
 
@@ -104,6 +106,11 @@ def iter_cashier_events(
 
             if not isinstance(record, dict):
                 raise IngestError(f"{path}:{line_number}: event must be a JSON object")
+            if record.get("schema_version") == "store.event.v1":
+                projected = _cashier_event_from_store_envelope(record, path=path, line=line_number)
+                if projected is not None:
+                    yield projected
+                continue
             for required in _REQUIRED_FIELDS:
                 if required not in record:
                     raise IngestError(f"{path}:{line_number}: missing required field {required!r}")
@@ -130,6 +137,40 @@ def iter_cashier_events(
                 )
             except (TypeError, ValueError) as exc:
                 raise IngestError(f"{path}:{line_number}: invalid field types: {exc}") from exc
+
+
+def _cashier_event_from_store_envelope(
+    record: dict[str, Any],
+    *,
+    path: Path,
+    line: int,
+) -> CashierEvent | None:
+    try:
+        event = load_event(record)
+    except EventValidationError as exc:
+        raise IngestError(f"{path}:{line}: invalid store.event.v1 envelope: {exc}") from exc
+
+    if event.department != "cashier":
+        return None
+
+    payload = dict(event.payload)
+    original_seq = payload.get("original_seq", 0)
+    original_hash = payload.get("original_hash", event.event_id)
+    try:
+        seq = int(original_seq)
+    except (TypeError, ValueError) as exc:
+        raise IngestError(
+            f"{path}:{line}: payload.original_seq={original_seq!r} is not an integer"
+        ) from exc
+
+    return CashierEvent(
+        seq=seq,
+        ts=event.ts,
+        type=event.type,
+        payload=payload,
+        prev="",
+        hash=str(original_hash),
+    )
 
 
 def read_cashier_events(
