@@ -20,6 +20,7 @@ from lemonade_accounting.ingest import read_cashier_events
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 ONE_DAY = FIXTURES / "one_day_cashier.jsonl"
+ONE_DAY_STORE_EVENTS = FIXTURES / "one_day_cashier_store_events.jsonl"
 
 D = Decimal
 
@@ -65,16 +66,16 @@ class TestDailyCloseSummary:
         p.write_text(
             '{"seq":1,"ts":"2026-05-18T14:00:00+00:00","type":"transaction.tender",'
             '"payload":{"total":"1.0001","tender":"2.0000","change":"0.9999"},"prev":"a","hash":"b"}\n',
-            encoding="utf-8"
+            encoding="utf-8",
         )
         events = read_cashier_events(p)
         close = daily_close(events, date_utc=date(2026, 5, 18), store_id="test-store")
-        
+
         # Internal summary should have 4 places (if we enforce it)
-        # For now, let's see what it has. 
+        # For now, let's see what it has.
         # Actually, if we WANT to enforce 4 places, we should check for it.
         assert close.summary.sales_total == D("1.0001")
-        
+
         # Envelope payload MUST be 2 places.
         assert close.event["payload"]["sales_total"] == "1.00"
         assert close.event["payload"]["cash_tendered_total"] == "2.00"
@@ -121,6 +122,24 @@ class TestEnvelopeEvent:
         a = daily_close(events, date_utc=date(2026, 5, 18), store_id="tie-dye-farms")
         b = daily_close(events, date_utc=date(2026, 5, 19), store_id="tie-dye-farms")
         assert a.event["event_id"] != b.event["event_id"]
+
+    def test_projected_store_events_produce_same_daily_close(self) -> None:
+        native = daily_close(
+            read_cashier_events(ONE_DAY),
+            date_utc=date(2026, 5, 18),
+            store_id="tie-dye-farms",
+        )
+        projected = daily_close(
+            read_cashier_events(ONE_DAY_STORE_EVENTS),
+            date_utc=date(2026, 5, 18),
+            store_id="tie-dye-farms",
+        )
+
+        assert projected.summary.transactions_closed == native.summary.transactions_closed
+        assert projected.summary.sales_total == native.summary.sales_total
+        assert projected.summary.cash_tendered_total == native.summary.cash_tendered_total
+        assert projected.summary.change_total == native.summary.change_total
+        assert load_event(projected.event).type == "accounting.daily_close"
 
 
 class TestCashierEventsAreReadOnly:
