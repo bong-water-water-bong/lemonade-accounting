@@ -155,6 +155,7 @@ def _cashier_event_from_store_envelope(
 
     payload = dict(event.payload)
     original_seq = payload.get("original_seq", 0)
+    original_prev = payload.get("original_prev", "")
     original_hash = payload.get("original_hash", event.event_id)
     try:
         seq = int(original_seq)
@@ -168,7 +169,7 @@ def _cashier_event_from_store_envelope(
         ts=event.ts,
         type=event.type,
         payload=payload,
-        prev="",
+        prev=str(original_prev),
         hash=str(original_hash),
     )
 
