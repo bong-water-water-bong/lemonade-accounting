@@ -59,6 +59,21 @@ v0.6   weekly / monthly digests
 A PR that adds a layer to the right of the current frontier should be
 rejected unless the frontier is reliably green.
 
+
+- Treat Karpathy's LLM Wiki pattern as governing law for durable agent memory: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f. Update `docs/wiki/` whenever work reveals durable architecture, workflow, gotcha, or onboarding knowledge.
+
+## OpenSpec Department Standard
+
+Use `openspec/` for every department-level change before implementation:
+
+1. Create or update a change folder under `openspec/changes/<change-id>/`.
+2. Record the department, affected event types, approval gates, and repo boundaries.
+3. Keep `openspec/specs/accounting/spec.md` aligned with this repo, `lemonade-store`, and the shared department registry.
+4. Implementation work must reference the change `tasks.md` and update it as tasks complete.
+5. Archive completed changes only after checks and owner/review approval are recorded.
+
+This repo owns the `accounting` implementation. `lemonade-store` remains the suite-level source for the shared registry and cross-department contract.
+
 ## Definition of done for any change
 
 - `make test` passes.
@@ -87,3 +102,15 @@ rejected unless the frontier is reliably green.
 - Automatic tax filing.
 - Customer-identity records.
 - A bookkeeping replacement (we export CSVs; we are not the books).
+
+## GitHub / OpenSpec / LLM Wiki Standard
+
+Treat Karpathy's LLM Wiki pattern as governing law for durable agent memory: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+
+- `docs/wiki/` is the durable project memory for architecture, decisions, gotchas, and onboarding.
+- `AGENTS.md` is the agent instruction schema.
+- `openspec/` is the structured change/spec layer.
+- Start non-trivial work with `openspec/changes/<change-id>/proposal.md`.
+- Track implementation in `openspec/changes/<change-id>/tasks.md`.
+- Update `docs/wiki/` whenever work reveals durable repo knowledge future agents need.
+- Keep changes surgical, simple, and verified by repo-native checks.

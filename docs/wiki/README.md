@@ -27,3 +27,28 @@ Provide deterministic, offline-first daily closing and cash reconciliation for t
 - **No Cloud Dependency**: Accounting must run entirely on the local Strix Halo workstation. No external API calls allowed.
 - **Deterministic IDs**: `event_id` is derived from `store_id`, `date`, and a hash of the payload. Changing the payload format will change all future event IDs for the same data.
 - **Wall-clock Budget**: The closer is designed to be fast (sub-5s) to avoid blocking other system operations.
+
+## OpenSpec Workflow
+
+Use `openspec/` as the working standard for department changes:
+
+- `openspec/project.md` defines this repo's department workflow.
+- `openspec/specs/accounting/spec.md` records the active contract for this department.
+- `openspec/changes/<change-id>/` holds proposal, design, and task files for active work.
+- GitHub issues and PRs must name affected event types and approval gates.
+
+Keep this repo aligned with `lemonade-store` when event contracts, owner approval gates, or department boundaries change.
+
+## LLM Wiki Standard
+
+This repo treats Andrej Karpathy's LLM Wiki pattern as the governing source for agent knowledge management: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+
+For this project, that means:
+
+- `docs/wiki/` is the maintained project memory for architecture, decisions, gotchas, and onboarding.
+- `AGENTS.md` is the agent instruction schema.
+- `openspec/` is the structured change/spec layer.
+- Raw source material stays in docs, examples, tests, issue/PR discussions, and committed specs.
+- Agents must update the wiki when they learn durable repo knowledge that future agents need.
+
+Keep wiki entries concise, factual, and linked back to concrete files, specs, or test evidence.

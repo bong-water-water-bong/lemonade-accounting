@@ -107,10 +107,15 @@ def iter_cashier_events(
             if not isinstance(record, dict):
                 raise IngestError(f"{path}:{line_number}: event must be a JSON object")
             if record.get("schema_version") == "store.event.v1":
-                projected = _cashier_event_from_store_envelope(record, path=path, line=line_number)
-                if projected is not None:
-                    yield projected
-                continue
+                # Is this a hybrid event (store envelope + top-level audit fields)?
+                # If it has seq, prev, and hash, it's a native cashier event.
+                if all(k in record for k in ("seq", "prev", "hash")):
+                    pass # handle normally below
+                else:
+                    projected = _cashier_event_from_store_envelope(record, path=path, line=line_number)
+                    if projected is not None:
+                        yield projected
+                    continue
             for required in _REQUIRED_FIELDS:
                 if required not in record:
                     raise IngestError(f"{path}:{line_number}: missing required field {required!r}")
