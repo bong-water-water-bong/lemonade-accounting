@@ -110,9 +110,11 @@ def iter_cashier_events(
                 # Is this a hybrid event (store envelope + top-level audit fields)?
                 # If it has seq, prev, and hash, it's a native cashier event.
                 if all(k in record for k in ("seq", "prev", "hash")):
-                    pass # handle normally below
+                    pass  # handle normally below
                 else:
-                    projected = _cashier_event_from_store_envelope(record, path=path, line=line_number)
+                    projected = _cashier_event_from_store_envelope(
+                        record, path=path, line=line_number
+                    )
                     if projected is not None:
                         yield projected
                     continue
