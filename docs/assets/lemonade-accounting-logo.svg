@@ -1,28 +1,120 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
-  <title id="title">Lemonade Accounting logo</title>
-  <desc id="desc">A local-first accounting department logo showing cash close, reconciliation, exports, and audit events.</desc>
-  <rect width="1200" height="420" rx="36" fill="#fff8d8"/>
-  <rect x="32" y="32" width="1136" height="356" rx="28" fill="#ffffff" stroke="#22313f" stroke-width="6"/>
-  <circle cx="145" cy="132" r="58" fill="#ffd34d" stroke="#22313f" stroke-width="6"/>
-  <path d="M126 132c0-19 14-32 34-32 12 0 23 5 31 13" fill="none" stroke="#22313f" stroke-width="10" stroke-linecap="round"/>
-  <path d="M163 101v-20M163 183v-20M126 164c8 9 20 14 35 14 21 0 36-12 36-30 0-20-16-27-35-31" fill="none" stroke="#22313f" stroke-width="10" stroke-linecap="round"/>
-  <text x="240" y="132" font-family="Inter, Arial, sans-serif" font-size="58" font-weight="800" fill="#22313f">Lemonade Accounting</text>
-  <text x="242" y="184" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="600" fill="#5c6b73">daily close • cash reconcile • CSV exports</text>
-  <g transform="translate(92 248)">
-    <rect width="248" height="76" rx="14" fill="#eaf7ef" stroke="#22313f" stroke-width="4"/>
-    <text x="124" y="48" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" fill="#22313f">cashier JSONL</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="480" viewBox="0 0 1440 480" role="img" aria-labelledby="title desc">
+  <title id="title">Lemonade Accounting department logo</title>
+  <desc id="desc">A Lemonade mascot beside a local-first accounting dashboard for the Lemonade Store suite. Tagline: Close the day. Count the cash.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fbff"/>
+      <stop offset="0.55" stop-color="#edf7fc"/>
+      <stop offset="1" stop-color="#e5f1f8"/>
+    </linearGradient>
+    <linearGradient id="lemon" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff176"/>
+      <stop offset="0.45" stop-color="#ffd83d"/>
+      <stop offset="1" stop-color="#f5a400"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c2530"/>
+      <stop offset="1" stop-color="#0c1117"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#102a43" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <rect width="1440" height="480" rx="36" fill="url(#bg)"/>
+  <path d="M0 340 C150 275 246 292 360 329 C503 374 622 358 760 292 C910 222 1040 224 1180 270 C1282 304 1356 286 1440 242 L1440 480 L0 480 Z" fill="#b7d9ed"/>
+  <path d="M0 378 C154 321 262 334 395 377 C532 421 675 386 812 332 C954 276 1082 286 1208 322 C1308 351 1370 344 1440 310 L1440 480 L0 480 Z" fill="#8fc2df" opacity="0.56"/>
+
+  <g transform="translate(58 55)" filter="url(#shadow)">
+    <rect x="0" y="0" width="456" height="320" rx="28" fill="url(#panel)"/>
+    <rect x="24" y="24" width="408" height="48" rx="14" fill="#121820"/>
+    <circle cx="50" cy="48" r="7" fill="#42d392"/>
+    <text x="72" y="56" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="800" fill="#f8fafc">Accounting Desk</text>
+    <text x="318" y="55" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#ffd447">LOCAL</text>
+
+    <g transform="translate(24 92)">
+      <rect width="126" height="86" rx="16" fill="#f8fafc"/>
+      <circle cx="38" cy="36" r="18" fill="#fff3c4" stroke="#854d0e" stroke-width="4"/>
+      <path d="M70 26 h30 M70 43 h42 M70 60 h28" stroke="#334155" stroke-width="7" stroke-linecap="round"/>
+      <text x="18" y="80" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="10" font-weight="800" fill="#475569">CASH</text>
+    </g>
+
+    <g transform="translate(166 92)">
+      <rect width="126" height="86" rx="16" fill="#16202b" stroke="#2e3a47"/>
+      <path d="M24 58 C42 28 70 23 96 44" fill="none" stroke="#42d392" stroke-width="7" stroke-linecap="round"/>
+      <circle cx="34" cy="30" r="8" fill="#42d392"/>
+      <circle cx="90" cy="58" r="8" fill="#ffd447"/>
+      <text x="22" y="78" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="800" fill="#d1fae5">CLOSE</text>
+    </g>
+
+    <g transform="translate(308 92)">
+      <rect width="124" height="86" rx="16" fill="#f8fafc"/>
+      <path d="M31 61 h58 a16 16 0 0 0 16 -16 v-8" fill="none" stroke="#166534" stroke-width="7" stroke-linecap="round"/>
+      <path d="M105 29 l18 12 l-18 12z" fill="#166534"/>
+      <rect x="28" y="24" width="50" height="38" rx="8" fill="#fff3c4" stroke="#854d0e" stroke-width="4"/>
+      <text x="24" y="80" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="10" font-weight="800" fill="#475569">CSV</text>
+    </g>
+
+    <g transform="translate(24 198)">
+      <rect width="192" height="92" rx="18" fill="#111820" stroke="#2e3a47"/>
+      <text x="18" y="32" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="800" fill="#cbd5e1">CASH</text>
+      <text x="18" y="72" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" fill="#f8fafc">$1,284</text>
+      <circle cx="162" cy="62" r="18" fill="#166534"/>
+      <path d="M153 62 l7 7 l14 -17" fill="none" stroke="#f8fafc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <g transform="translate(236 198)">
+      <rect width="196" height="92" rx="18" fill="#111820" stroke="#2e3a47"/>
+      <text x="22" y="32" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="800" fill="#cbd5e1">CLOSE</text>
+      <text x="22" y="68" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="28" font-weight="900" fill="#f8fafc">20:00</text>
+      <text x="22" y="86" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="800" fill="#cbd5e1">CSV: export</text>
+    </g>
   </g>
-  <path d="M356 286h84" stroke="#22313f" stroke-width="8" stroke-linecap="round"/>
-  <path d="M424 266l24 20-24 20" fill="none" stroke="#22313f" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-  <g transform="translate(472 230)">
-    <rect width="256" height="112" rx="16" fill="#fff3b0" stroke="#22313f" stroke-width="4"/>
-    <text x="128" y="48" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800" fill="#22313f">closer</text>
-    <text x="128" y="82" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700" fill="#5c6b73">deterministic</text>
+
+  <g transform="translate(420 80)" filter="url(#shadow)">
+    <ellipse cx="135" cy="135" rx="96" ry="112" fill="url(#lemon)" stroke="#3b2f0b" stroke-width="8"/>
+    <path d="M88 34 C105 4 140 -3 170 18 C138 30 116 39 88 34Z" fill="#75a843" stroke="#2f4c1f" stroke-width="7"/>
+    <path d="M158 26 C178 5 211 12 226 40 C198 38 176 34 158 26Z" fill="#8fbd4d" stroke="#2f4c1f" stroke-width="7"/>
+    <path d="M55 104 C82 91 112 93 133 109 L128 135 C99 123 74 123 48 135 Z" fill="#111111"/>
+    <path d="M145 109 C169 91 202 93 224 111 L216 137 C190 123 168 122 140 136 Z" fill="#111111"/>
+    <path d="M73 102 C115 91 163 94 213 108" fill="none" stroke="#111111" stroke-width="10" stroke-linecap="round"/>
+    <path d="M82 170 C118 201 163 201 198 170" fill="none" stroke="#37290a" stroke-width="9" stroke-linecap="round"/>
+    <path d="M38 176 C13 189 7 219 29 235" fill="none" stroke="#2b240a" stroke-width="11" stroke-linecap="round"/>
+    <path d="M226 178 C266 170 286 194 278 230" fill="none" stroke="#2b240a" stroke-width="11" stroke-linecap="round"/>
+    <rect x="213" y="205" width="112" height="78" rx="12" transform="rotate(7 213 205)" fill="#f8fafc" stroke="#20252d" stroke-width="6"/>
+    <path d="M236 232 h61 M234 253 h44" stroke="#64748b" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="298" cy="260" r="8" fill="#166534"/>
+    <rect x="49" y="222" width="156" height="54" rx="16" fill="#166534" stroke="#2b240a" stroke-width="6"/>
+    <text x="127" y="258" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="900" text-anchor="middle" fill="#f8fafc">ACCOUNTING</text>
+    <path d="M92 271 l-22 50 M178 272 l27 48" stroke="#2b240a" stroke-width="12" stroke-linecap="round"/>
   </g>
-  <path d="M744 286h84" stroke="#22313f" stroke-width="8" stroke-linecap="round"/>
-  <path d="M812 266l24 20-24 20" fill="none" stroke="#22313f" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-  <g transform="translate(860 248)">
-    <rect width="248" height="76" rx="14" fill="#e9f0ff" stroke="#22313f" stroke-width="4"/>
-    <text x="124" y="48" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" fill="#22313f">accounting.*</text>
+
+  <g transform="translate(742 88)">
+    <text x="0" y="78" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="78" font-weight="900" letter-spacing="0" fill="#101820">Lemonade</text>
+    <text x="3" y="152" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="72" font-weight="900" letter-spacing="0" fill="#166534">Accounting</text>
+    <text x="6" y="194" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" fill="#854d0e">Close the day. Count the cash.</text>
+    <text x="8" y="228" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="800" fill="#334155">daily close + CSV exports + reconciliation</text>
+    <text x="8" y="254" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#475569">cashier JSONL -> closer -> accounting events</text>
+
+    <g transform="translate(6 282)">
+      <rect x="0" y="0" width="126" height="38" rx="19" fill="#101820"/>
+      <text x="18" y="25" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="800" fill="#f8fafc">close</text>
+      <rect x="140" y="0" width="122" height="38" rx="19" fill="#fff3c4"/>
+      <text x="160" y="25" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="800" fill="#854d0e">cash</text>
+      <rect x="276" y="0" width="120" height="38" rx="19" fill="#dff6e7"/>
+      <text x="296" y="25" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="800" fill="#166534">csv</text>
+      <rect x="410" y="0" width="126" height="38" rx="19" fill="#dbeafe"/>
+      <text x="430" y="25" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="800" fill="#1d4ed8">offline</text>
+    </g>
+
+    <g transform="translate(6 344)">
+      <path d="M0 0 h520" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="20" cy="0" r="9" fill="#ffd447"/>
+      <text x="40" y="7" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#475569">read events</text>
+      <circle cx="190" cy="0" r="9" fill="#42d392"/>
+      <text x="210" y="7" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#475569">draft locally</text>
+      <circle cx="365" cy="0" r="9" fill="#60a5fa"/>
+      <text x="385" y="7" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="17" font-weight="700" fill="#475569">owner gate</text>
+    </g>
   </g>
 </svg>
