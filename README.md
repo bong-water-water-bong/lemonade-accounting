@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 <p align="center">
-  <img src="docs/assets/lemonade-accounting-logo.svg" alt="Lemonade Accounting logo showing cashier JSONL flowing through the closer into accounting events" width="900">
+  <img src="docs/assets/lemonade-accounting-logo.svg" alt="Lemonade Accounting logo with the Lemonade mascot beside a daily-close dashboard" width="900">
 </p>
 
 > Daily close, cash reconciliation, and CSV exports for Lemonade Store.
