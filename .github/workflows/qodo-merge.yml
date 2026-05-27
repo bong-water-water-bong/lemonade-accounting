@@ -5,6 +5,7 @@ on:
 
 jobs:
   qodo-merge:
+    if: ${{ secrets.QODO_API_KEY != "" }}
     runs-on: ubuntu-latest
     permissions:
       issues: write
