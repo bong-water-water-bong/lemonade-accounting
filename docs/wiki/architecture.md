@@ -1,50 +1,60 @@
 # Architecture
 
-> Daily close, cash reconciliation, and CSV export. Reads cashier JSONL events, emits `accounting.*` envelope events.
+> Daily close, cash reconciliation, and CSV export. Reads cashier JSONL events (including native logs and store.event.v1 envelopes), projects them to standard representation, and emits `accounting.*` envelope events.
 
 ## Overview
-lemonade-accounting is a read-only consumer of `lemonade-cashier` event logs. It never writes to cashier state — it projects financial summaries from the append-only JSONL event log.
+`lemonade-accounting` is a read-only consumer of cashier event logs. It projects financial summaries without modifying the append-only source log.
 
 ```
-lemonade-cashier JSONL log
-        ↓
-lemonade_accounting.reader  (reads & validates store.event.v1 envelopes)
-        ↓
-lemonade_accounting.engine  (double-entry bookkeeping, cash reconciliation)
-        ↓
-accounting.daily_close.v1   (emitted to shared event envelope)
-accounting.discrepancy.v1   (emitted when cash-out != expected)
-        ↓
-CSV export / reports
+                  [cashier JSONL log]
+                           │
+                           ▼
+                  lemonade_accounting
+                      (ingest.py)
+                           │
+             ┌─────────────┴─────────────┐
+             ▼                           ▼
+       (closer.py)                (csv_export.py)
+             │                           │
+             ▼                           ▼
+[accounting.daily_close.v1]        [CSV Exports]
 ```
+
+## Ingestion Pipeline (`ingest.py`)
+The `ingest.py` module is the single source of knowledge for cashier event shapes. It accepts cashier events in two formats:
+
+1. **Native Cashier JSONL**: A flat JSON object containing audit fields at the top level:
+   - `seq`: The transaction sequence number (int)
+   - `ts`: ISO-8601 UTC timestamp (str)
+   - `type`: Cashier event type (str)
+   - `payload`: Event-specific data (dict)
+   - `prev`: SHA-256 hash of the previous record (str)
+   - `hash`: SHA-256 hash of the current record (str)
+
+2. **Store Envelope Events (`store.event.v1`)**: Hybrid/envelope events containing a `schema_version = "store.event.v1"` field.
+   - Loaded and validated using `lemonade_store.events.load_event`.
+   - Events are filtered to process only those belonging to the `cashier` department.
+   - These envelopes are projected back to a uniform `CashierEvent` object by mapping envelope payload properties to native cashier fields:
+     - `payload.original_seq` ➔ `seq`
+     - `payload.original_prev` ➔ `prev`
+     - `payload.original_hash` ➔ `hash`
+     - Timestamp, type, and payload are retrieved from the envelope event.
 
 ## Key Modules
-- `src/lemonade_accounting/reader.py` — reads and validates cashier JSONL
-- `src/lemonade_accounting/engine.py` — cash reconciliation, daily close logic
-- `src/lemonade_accounting/export.py` — CSV and summary report generation
-- `src/lemonade_accounting/events.py` — `accounting.*` event type definitions
+- [ingest.py](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/src/lemonade_accounting/ingest.py) — Parses, validates, and standardizes cashier events from files with a configurable wall-clock timeout guard.
+- [closer.py](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/src/lemonade_accounting/closer.py) — Enforces daily close business logic, accumulates transactions, and builds the signed/hashed `accounting.daily_close` store envelope.
+- [csv_export.py](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/src/lemonade_accounting/csv_export.py) — Translates cashier events to a standardized tabular CSV format for use by traditional accounting software.
+- [cli.py](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/src/lemonade_accounting/cli.py) — Implements the `lemonade-accounting close` command line interface.
 
 ## Invariants
-- **Never write to cashier log**: accounting is read-only. If you find yourself calling cashier write APIs, that's wrong.
-- **Decimal only**: all monetary calculations use `Decimal`, same as cashier core.
-- **Idempotent close**: running daily close twice produces the same result.
-- **No external dependencies in core**: stdlib-only in `engine.py` and `reader.py`.
+- **Read-Only**: The accounting system must never write to cashier log streams or databases.
+- **Precision**: Floats are prohibited for currency. All monetary operations must employ python's `Decimal` type.
+- **Determinism**: Daily close outputs (including the generated `event_id`) must be byte-for-byte identical when re-run with the same input events, date, and store identifier.
+- **No Third-Party Runtime Dependencies**: With the exception of `lemonade-store` (shared event models), the core library utilizes python's standard library only.
+- **Time Limits**: File operations must check wall-clock budgets periodically to prevent blocking.
 
-## How to Test
-```bash
-make test       # full suite
-make lint       # flake8 + black
-make type       # mypy
-```
-
-Test fixtures use synthetic cashier JSONL logs in `tests/fixtures/`.
-
-## Current Priorities
-- Reconciliation engine: comparing physical cash count to calculated expected cash
-- Discrepancy detection and `accounting.discrepancy.v1` event emission
-- CSV export for accountant hand-off
-
-## Related
-- [[README]] — mission and agent handoff
-- `lemonade-cashier` — source of truth event log
-- `lemonade-store` — umbrella event envelope definitions
+## Related Docs
+- [README.md](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/docs/wiki/README.md) — Mission and entry point
+- [conventions.md](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/docs/wiki/conventions.md) — Coding styles & patterns
+- [runbook.md](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/docs/wiki/runbook.md) — Executing CLI commands & test suites
+- [agents.md](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/docs/wiki/agents.md) — Rules, limits, and safe change zones
