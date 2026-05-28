@@ -16,8 +16,9 @@ Provide deterministic, offline-first daily closing and cash reconciliation for t
     - `make lint`: Runs ruff for linting and formatting checks.
     - `make type`: Runs mypy for strict type checking.
 - **Hot Paths**:
-    - `src/lemonade_accounting/core.py`: Logic for daily close and reconciliation.
-    - `src/lemonade_accounting/io.py`: Cashier log reading and CSV export logic.
+    - [closer.py](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/src/lemonade_accounting/closer.py): Logic for daily close.
+    - [ingest.py](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/src/lemonade_accounting/ingest.py): Cashier log reading and validation.
+    - [csv_export.py](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/src/lemonade_accounting/csv_export.py): CSV export logic.
 - **Current Priorities**:
     - Implementing `accounting.cash_reconciled` for drawer-to-expected matching.
     - Expanding the barter ledger (`accounting.barter_recorded`).
@@ -55,8 +56,8 @@ Keep wiki entries concise, factual, and linked back to concrete files, specs, or
 
 ## Wiki Pages
 
-- [[architecture]] — High-level accounting architecture and closer agent event ingestion pipeline.
-- [[conventions]] — PEP 8, mypy strict typings, standard library core rules, and Decimal pricing math.
-- [[runbook]] — Command lines, test suites, close procedures.
-- [[agents]] — Safety rules, actor roles, safe zones.
+- [architecture.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/architecture.md) — High-level accounting architecture and closer agent event ingestion pipeline.
+- [conventions.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/conventions.md) — PEP 8, mypy strict typings, standard library core rules, and Decimal pricing math.
+- [runbook.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/runbook.md) — Command lines, test suites, close procedures.
+- [agents.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/agents.md) — Safety rules, actor roles, safe zones.
 

@@ -52,7 +52,7 @@ The following areas are strictly forbidden for autonomous changes. Modifying the
 - **Error Handling**: Do not let standard exceptions leak from parsing code. Translate bad JSON, format mismatches, and timeouts into `IngestError` instances inside `ingest.py`.
 
 ## Related Docs
-- [README.md](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/docs/wiki/README.md) — Mission and entry point
-- [architecture.md](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/docs/wiki/architecture.md) — Pipeline and ingestion architecture
-- [conventions.md](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/docs/wiki/conventions.md) — Standards and style guides
-- [runbook.md](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/docs/wiki/runbook.md) — Execution and validation runbook
+- [README.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/README.md) — Mission and entry point
+- [architecture.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/architecture.md) — Pipeline and ingestion architecture
+- [conventions.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/conventions.md) — Standards and style guides
+- [runbook.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/runbook.md) — Execution and validation runbook

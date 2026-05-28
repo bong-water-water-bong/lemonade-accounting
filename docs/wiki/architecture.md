@@ -17,7 +17,7 @@
        (closer.py)                (csv_export.py)
              │                           │
              ▼                           ▼
-[accounting.daily_close.v1]        [CSV Exports]
+[accounting.daily_close]        [CSV Exports]
 ```
 
 ## Ingestion Pipeline (`ingest.py`)
@@ -41,10 +41,10 @@ The `ingest.py` module is the single source of knowledge for cashier event shape
      - Timestamp, type, and payload are retrieved from the envelope event.
 
 ## Key Modules
-- [ingest.py](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/src/lemonade_accounting/ingest.py) — Parses, validates, and standardizes cashier events from files with a configurable wall-clock timeout guard.
-- [closer.py](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/src/lemonade_accounting/closer.py) — Enforces daily close business logic, accumulates transactions, and builds the signed/hashed `accounting.daily_close` store envelope.
-- [csv_export.py](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/src/lemonade_accounting/csv_export.py) — Translates cashier events to a standardized tabular CSV format for use by traditional accounting software.
-- [cli.py](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/src/lemonade_accounting/cli.py) — Implements the `lemonade-accounting close` command line interface.
+- [ingest.py](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/src/lemonade_accounting/ingest.py) — Parses, validates, and standardizes cashier events from files with a configurable wall-clock timeout guard.
+- [closer.py](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/src/lemonade_accounting/closer.py) — Enforces daily close business logic, accumulates transactions, and builds the signed/hashed `accounting.daily_close` store envelope.
+- [csv_export.py](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/src/lemonade_accounting/csv_export.py) — Translates cashier events to a standardized tabular CSV format for use by traditional accounting software.
+- [cli.py](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/src/lemonade_accounting/cli.py) — Implements the `lemonade-accounting close` command line interface.
 
 ## Invariants
 - **Read-Only**: The accounting system must never write to cashier log streams or databases.
@@ -54,7 +54,7 @@ The `ingest.py` module is the single source of knowledge for cashier event shape
 - **Time Limits**: File operations must check wall-clock budgets periodically to prevent blocking.
 
 ## Related Docs
-- [README.md](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/docs/wiki/README.md) — Mission and entry point
-- [conventions.md](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/docs/wiki/conventions.md) — Coding styles & patterns
-- [runbook.md](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/docs/wiki/runbook.md) — Executing CLI commands & test suites
-- [agents.md](file:///home/bcloud/multica_workspaces/eb279b7e-f49c-4099-a687-c1af978f0a5d/5e8bc9a5/workdir/lemonade-accounting/docs/wiki/agents.md) — Rules, limits, and safe change zones
+- [README.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/README.md) — Mission and entry point
+- [conventions.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/conventions.md) — Coding styles & patterns
+- [runbook.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/runbook.md) — Executing CLI commands & test suites
+- [agents.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/agents.md) — Rules, limits, and safe change zones
