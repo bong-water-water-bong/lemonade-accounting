@@ -52,3 +52,11 @@ For this project, that means:
 - Agents must update the wiki when they learn durable repo knowledge that future agents need.
 
 Keep wiki entries concise, factual, and linked back to concrete files, specs, or test evidence.
+
+## Wiki Pages
+
+- [[architecture]] — High-level accounting architecture and closer agent event ingestion pipeline.
+- [[conventions]] — PEP 8, mypy strict typings, standard library core rules, and Decimal pricing math.
+- [[runbook]] — Command lines, test suites, close procedures.
+- [[agents]] — Safety rules, actor roles, safe zones.
+
