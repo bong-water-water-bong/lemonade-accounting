@@ -35,7 +35,7 @@ This document outlines the standard coding styles, naming practices, and design 
 - **Test-Driven Changes**: Any functional change or bugfix must be accompanied by new pytest coverage. Ensure the build remains fully green.
 
 ## Related Docs
-- [README.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/README.md) — Mission and entry point
-- [architecture.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/architecture.md) — System design and data flows
-- [runbook.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/runbook.md) — How to test and run the project
-- [agents.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/agents.md) — Rules, limits, and safe change zones
+- [README.md](README.md) — Mission and entry point
+- [architecture.md](architecture.md) — System design and data flows
+- [runbook.md](runbook.md) — How to test and run the project
+- [agents.md](agents.md) — Rules, limits, and safe change zones

@@ -90,7 +90,7 @@ Outputs the structured `accounting.daily_close` envelope JSON string directly to
   The provided date string is not in standard ISO format (`YYYY-MM-DD`). Fix the CLI arguments and re-run.
 
 ## Related Docs
-- [README.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/README.md) — Mission and entry point
-- [architecture.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/architecture.md) — System design and pipeline flows
-- [conventions.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/conventions.md) — Coding conventions & rules
-- [agents.md](file:///home/bcloud/multica_workspaces_desktop-localhost-18088/eb279b7e-f49c-4099-a687-c1af978f0a5d/295c11a5/workdir/lemonade-accounting/docs/wiki/agents.md) — Rules, limits, and safe change zones
+- [README.md](README.md) — Mission and entry point
+- [architecture.md](architecture.md) — System design and pipeline flows
+- [conventions.md](conventions.md) — Coding conventions & rules
+- [agents.md](agents.md) — Rules, limits, and safe change zones
