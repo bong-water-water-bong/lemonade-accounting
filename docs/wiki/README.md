@@ -13,7 +13,8 @@ Provide deterministic, offline-first daily closing and cash reconciliation for t
 ## Agent Handoff
 - **How to Test**:
     - `make test`: Runs the pytest suite.
-    - `make lint`: Runs ruff for linting and formatting checks.
+    - `make lint`: Runs ruff for linting checks.
+    - `make fmt`: Runs ruff to automatically format code.
     - `make type`: Runs mypy for strict type checking.
 - **Hot Paths**:
     - [closer.py](../../src/lemonade_accounting/closer.py): Logic for daily close.
