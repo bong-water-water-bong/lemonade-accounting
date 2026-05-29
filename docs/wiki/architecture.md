@@ -50,7 +50,7 @@ The `ingest.py` module is the single source of knowledge for cashier event shape
 - **Read-Only**: The accounting system must never write to cashier log streams or databases.
 - **Precision**: Floats are prohibited for currency. All monetary operations must employ python's `Decimal` type.
 - **Determinism**: Daily close outputs (including the generated `event_id`) must be byte-for-byte identical when re-run with the same input events, date, and store identifier.
-- **No Third-Party Runtime Dependencies**: With the exception of `lemonade-store` (shared event models), the core library utilizes python's standard library only.
+- **No Third-Party Runtime Dependencies**: With the exceptions of `lemonade-store` (shared event models) and `lemonade-agents` (offline agents runtime support) declared in [pyproject.toml](../../pyproject.toml#L28-L31), the core library utilizes Python's standard library only.
 - **Time Limits**: File operations must check wall-clock budgets periodically to prevent blocking.
 
 ## Related Docs

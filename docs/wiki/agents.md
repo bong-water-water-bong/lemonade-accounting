@@ -8,13 +8,13 @@ Agents are encouraged to modify, optimize, or extend the following modules:
 
 - **`src/lemonade_accounting/ingest.py`**: Optimizing parsing performance, handling hybrid format schema variations, or tweaking wall-clock timeout checks.
 - **`src/lemonade_accounting/closer.py`**: Modifying daily close summaries or calculating metrics from cashier events.
-- **`src/lemonade_accounting/csv_export.py`**: Adding or refining CSV columns generated for accountants, provided they derive solely from standard `CashierEvent` inputs.
+- **`src/lemonade_accounting/csv_export.py`**: Adding or refining CSV columns generated for accountants, provided they derive solely from standard `CashierEvent` inputs (defined in [ingest.py](../../src/lemonade_accounting/ingest.py#L53) and [openspec/specs/accounting/spec.md](../../openspec/specs/accounting/spec.md)). Note that modifying the columns in `TRANSACTION_COLUMNS` changes the format contract and is unsafe without human operator approval.
 - **`src/lemonade_accounting/cli.py`**: Extending CLI argument parsing or error handling messages.
 - **Tests**: Adding pytest test cases, mock event logs, or edge-case validation checks under the `tests/` directory.
 
 Any code change is considered safe only if:
 1. `make test` runs and passes successfully.
-2. `make lint` and `make type` report zero errors.
+2. `make lint` and `make type` report zero errors, governed by the configurations in [pyproject.toml](../../pyproject.toml).
 3. It strictly respects the **Hard Rules** listed below.
 
 ---
@@ -29,11 +29,11 @@ The following areas are strictly forbidden for autonomous changes. Modifying the
 
 ### 2. Modifying Cashier State
 - **Accounting must remain strictly read-only.**
-- Do not add APIs, write commands, or append logic targeting `lemonade-cashier` event logs or cashier databases.
+- Do not add APIs, write commands, or append logic targeting `lemonade-cashier` event logs or cashier databases. Accounting reads cashier event log JSONL files passed as command-line arguments but has no connection to cashier databases or running cashier processes.
 
 ### 3. Customer Data & PII
 - **Do not collect, store, or process Customer PII** (Personally Identifiable Information).
-- Customer names, phone numbers, loyalty details, credit card numbers, audio recordings, or photos must never be persisted, logged, or exported.
+- Customer names, phone numbers, loyalty details, credit card numbers, audio recordings, or photos must never be persisted, logged, or exported. This restriction is inherited from the suite-wide privacy boundary defined in the workspace root [AGENTS.md](../../AGENTS.md#L33-L34).
 
 ### 4. Cloud Services / Integrations
 - **No external network connections or cloud pushes.**
@@ -41,7 +41,7 @@ The following areas are strictly forbidden for autonomous changes. Modifying the
 
 ### 5. Runtime Third-Party Dependencies
 - **No new third-party packages in `dependencies`** within `pyproject.toml`.
-- The runtime code must remain standard-library-only, with the sole exception of the `lemonade-store` package.
+- The runtime code must remain standard-library-only, with the exceptions of the `lemonade-store` package (shared event contracts) and the `lemonade-agents` package (offline agents runtime support) declared in [pyproject.toml](../../pyproject.toml#L28-L31).
 
 ---
 

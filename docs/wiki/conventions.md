@@ -11,7 +11,7 @@ This document outlines the standard coding styles, naming practices, and design 
 ## Dependency Management
 
 - **Runtime Constraints**: To maintain a lightweight, offline-capable service, the core package remains standard-library-only.
-- **Allowed Extensions**: The only external runtime dependency is `lemonade-store`, which provides contract validation for the shared store envelopes. No third-party network clients, database connectors, or web servers may be added.
+- **Allowed Extensions**: The allowed external runtime dependencies are `lemonade-store` (for validation/contract envelopes) and `lemonade-agents` (for execution contracts) as specified in [pyproject.toml](../../pyproject.toml#L28-L31). No other third-party network clients, database connectors, or web servers may be added.
 
 ## Strict Type Safety
 
