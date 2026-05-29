@@ -13,11 +13,13 @@ Provide deterministic, offline-first daily closing and cash reconciliation for t
 ## Agent Handoff
 - **How to Test**:
     - `make test`: Runs the pytest suite.
-    - `make lint`: Runs ruff for linting and formatting checks.
+    - `make lint`: Runs ruff for linting checks.
+    - `make fmt`: Runs ruff to automatically format code.
     - `make type`: Runs mypy for strict type checking.
 - **Hot Paths**:
-    - `src/lemonade_accounting/core.py`: Logic for daily close and reconciliation.
-    - `src/lemonade_accounting/io.py`: Cashier log reading and CSV export logic.
+    - [closer.py](../../src/lemonade_accounting/closer.py): Logic for daily close.
+    - [ingest.py](../../src/lemonade_accounting/ingest.py): Cashier log reading and validation.
+    - [csv_export.py](../../src/lemonade_accounting/csv_export.py): CSV export logic.
 - **Current Priorities**:
     - Implementing `accounting.cash_reconciled` for drawer-to-expected matching.
     - Expanding the barter ledger (`accounting.barter_recorded`).
@@ -52,3 +54,11 @@ For this project, that means:
 - Agents must update the wiki when they learn durable repo knowledge that future agents need.
 
 Keep wiki entries concise, factual, and linked back to concrete files, specs, or test evidence.
+
+## Wiki Pages
+
+- [architecture.md](architecture.md) — High-level accounting architecture and closer agent event ingestion pipeline.
+- [conventions.md](conventions.md) — PEP 8, mypy strict typings, standard library core rules, and Decimal pricing math.
+- [runbook.md](runbook.md) — Command lines, test suites, close procedures.
+- [agents.md](agents.md) — Safety rules, actor roles, safe zones.
+
