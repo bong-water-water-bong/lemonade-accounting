@@ -1,6 +1,6 @@
 # Coding Conventions
 
-This document outlines the standard coding styles, naming practices, and design patterns enforced in `lemonade-accounting`.
+This document outlines the standard coding styles, dependency rules, and workflows enforced in `lemonade-accounting`.
 
 ## Monetary Values & Precision
 
