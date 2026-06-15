@@ -2,7 +2,7 @@
 
 [![ci](https://github.com/bong-water-water-bong/lemonade-accounting/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bong-water-water-bong/lemonade-accounting/actions/workflows/ci.yml)
 [![docs](https://github.com/bong-water-water-bong/lemonade-accounting/actions/workflows/docs.yml/badge.svg?branch=main)](https://github.com/bong-water-water-bong/lemonade-accounting/actions/workflows/docs.yml)
-[![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue)](pyproject.toml)
+[![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue)](pyproject.toml)
 [![Store](https://img.shields.io/badge/contracts-lemonade--store%20main-2ea44f)](https://github.com/bong-water-water-bong/lemonade-store)
 [![Cashier](https://img.shields.io/badge/source--of--truth-lemonade--cashier-2ea44f)](https://github.com/bong-water-water-bong/lemonade-cashier)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -63,6 +63,17 @@ Python 3.11+. The runtime depends on
 `lemonade-store @ git+https://github.com/bong-water-water-bong/lemonade-store@main`
 for the shared envelope; everything else is stdlib. The optional
 `agents` extra installs the external GAIA agent bridge when needed.
+
+## Suite runtime boundary
+
+- Accounting reads cashier logs and writes accounting events; it never
+  mutates cashier state.
+- `make install` creates `.venv` and keeps the base install free of
+  GAIA/model runtime packages.
+- `make install-agents` is the explicit opt-in path for the
+  `lemonade-agents` bridge when running local Lemonade SDK / GAIA agents.
+- Reports and external accountant handoff remain local files unless an
+  owner-approved export path is added outside the core close workflow.
 
 ## CLI
 

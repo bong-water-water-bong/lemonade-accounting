@@ -10,6 +10,16 @@ Provide deterministic, offline-first daily closing and cash reconciliation for t
 - **Shared Contracts**: Uses the `store.event.v1` envelope from `lemonade-store` for all emitted events.
 - **CSV Bridge**: Generates human-readable CSV exports for traditional accounting tools, maintaining the "offline-capable" mandate.
 
+## Runtime Setup
+
+- `make install` creates `.venv` and installs accounting with
+  `lemonade-store@main` plus development/docs tooling.
+- The base install does not include `lemonade-agents`, GAIA, Torch, or
+  model runtime packages.
+- `make install-agents` is the explicit opt-in path for running local
+  Lemonade SDK / GAIA accounting agents.
+- Daily close and CSV export remain deterministic local workflows.
+
 ## Agent Handoff
 - **How to Test**:
     - `make test`: Runs the pytest suite.
