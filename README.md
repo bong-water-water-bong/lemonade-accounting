@@ -3,7 +3,7 @@
 [![ci](https://github.com/bong-water-water-bong/lemonade-accounting/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bong-water-water-bong/lemonade-accounting/actions/workflows/ci.yml)
 [![docs](https://github.com/bong-water-water-bong/lemonade-accounting/actions/workflows/docs.yml/badge.svg?branch=main)](https://github.com/bong-water-water-bong/lemonade-accounting/actions/workflows/docs.yml)
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue)](pyproject.toml)
-[![Store](https://img.shields.io/badge/contracts-lemonade--store%20v0.1.0-2ea44f)](https://github.com/bong-water-water-bong/lemonade-store)
+[![Store](https://img.shields.io/badge/contracts-lemonade--store%20main-2ea44f)](https://github.com/bong-water-water-bong/lemonade-store)
 [![Cashier](https://img.shields.io/badge/source--of--truth-lemonade--cashier-2ea44f)](https://github.com/bong-water-water-bong/lemonade-cashier)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -60,8 +60,9 @@ make test
 ```
 
 Python 3.11+. The runtime depends on
-`lemonade-store @ git+https://github.com/bong-water-water-bong/lemonade-store@v0.1.0`
-for the shared envelope; everything else is stdlib.
+`lemonade-store @ git+https://github.com/bong-water-water-bong/lemonade-store@main`
+for the shared envelope; everything else is stdlib. The optional
+`agents` extra installs the external GAIA agent bridge when needed.
 
 ## CLI
 
