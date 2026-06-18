@@ -36,3 +36,8 @@ markdown_extensions:
       permalink: true
 
 strict: true
+
+exclude_docs: |
+  wiki/
+  AGENTS.md
+
