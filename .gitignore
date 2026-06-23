@@ -217,6 +217,9 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
+# Claude Code agent session state (must not be committed)
+.claude/memory.db
+
 # Ruflo runtime (generated, not for git)
 .claude-flow/data/
 .claude-flow/logs/
