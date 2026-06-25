@@ -27,12 +27,12 @@ classifiers = [
 # registry. It is the only runtime dependency; everything else is
 # stdlib.
 dependencies = [
-  "lemonade-store @ git+https://github.com/bong-water-water-bong/lemonade-store@main",
+  "lemonade-store>=0.1.0",
 ]
 
 [project.optional-dependencies]
 agents = [
-  "lemonade-agents @ git+https://github.com/bong-water-water-bong/lemonade-agents@main",
+  "lemonade-agents>=0.1.0",
 ]
 dev = [
   "pytest>=8",
