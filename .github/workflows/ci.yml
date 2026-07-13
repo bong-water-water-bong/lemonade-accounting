@@ -29,6 +29,8 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
           cache: pip
+      - name: Install sibling package (lemonade-store)
+        run: python -m pip install lemonade-store@git+https://github.com/bong-water-water-bong/lemonade-store.git
       - name: Install dev extras
         run: |
           python -m pip install --upgrade pip
@@ -46,6 +48,7 @@ jobs:
         with:
           python-version: "3.13"
           cache: pip
+      - run: python -m pip install lemonade-store@git+https://github.com/bong-water-water-bong/lemonade-store.git
       - run: python -m pip install --upgrade pip && python -m pip install -e ".[dev]"
       - run: python -m ruff check src tests
       - run: python -m ruff format --check src tests
@@ -60,5 +63,6 @@ jobs:
         with:
           python-version: "3.13"
           cache: pip
+      - run: python -m pip install lemonade-store@git+https://github.com/bong-water-water-bong/lemonade-store.git
       - run: python -m pip install --upgrade pip && python -m pip install -e ".[dev]"
       - run: python -m mypy
